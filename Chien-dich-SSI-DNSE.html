@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chiến dịch SSI & DNSE</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Be+Vietnam+Pro:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root{
+    --bg:#F5F4F2;
+    --card:#FFFFFF;
+    --ink:#1A1715;
+    --ink-2:#4A443F;
+    --ink-3:#7C746D;
+    --rule:#E0DCD7;
+    --ssi:#C8102E;
+    --ssi-bg:#FBEDEE;
+    --dnse:#7A1220;
+    --dnse-bg:#F7EBEC;
+    --flag:#8A6212;
+    --flag-bg:#FAF2DF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#131110;
+      --card:#1C1918;
+      --ink:#F0ECE8;
+      --ink-2:#BEB6AF;
+      --ink-3:#8E8681;
+      --rule:#2E2A28;
+      --ssi:#F28090;
+      --ssi-bg:#2B1618;
+      --dnse:#E09098;
+      --dnse-bg:#261416;
+      --flag:#D6AE5C;
+      --flag-bg:#2A2213;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#131110;
+    --card:#1C1918;
+    --ink:#F0ECE8;
+    --ink-2:#BEB6AF;
+    --ink-3:#8E8681;
+    --rule:#2E2A28;
+    --ssi:#F28090;
+    --ssi-bg:#2B1618;
+    --dnse:#E09098;
+    --dnse-bg:#261416;
+    --flag:#D6AE5C;
+    --flag-bg:#2A2213;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Be Vietnam Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:1rem;line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 clamp(16px,4vw,32px) 80px;}
+
+  header{padding:clamp(36px,6vw,64px) 0 28px;}
+  .kicker{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-3);margin:0 0 14px;
+  }
+  h1{
+    font-family:"Bricolage Grotesque","Be Vietnam Pro",sans-serif;
+    font-weight:700;font-size:clamp(2rem,5.5vw,3rem);line-height:1.05;
+    letter-spacing:-.02em;text-wrap:balance;margin:0 0 14px;
+  }
+  header p{color:var(--ink-2);max-width:60ch;margin:0 0 6px;}
+  .stamp{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.75rem;color:var(--ink-3);margin-top:14px;
+  }
+
+  .co-head{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    margin:clamp(40px,6vw,64px) 0 4px;padding-bottom:12px;
+    border-bottom:2px solid var(--rule);
+  }
+  .co-head .name{
+    font-family:"Bricolage Grotesque","Be Vietnam Pro",sans-serif;
+    font-weight:700;font-size:1.75rem;letter-spacing:-.01em;
+  }
+  .co-head .count{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;
+    padding:3px 9px;border-radius:99px;
+  }
+  #ssi .co-head .name{color:var(--ssi);}
+  #ssi .co-head .count{background:var(--ssi-bg);color:var(--ssi);}
+  #dnse .co-head .name{color:var(--dnse);}
+  #dnse .co-head .count{background:var(--dnse-bg);color:var(--dnse);}
+  .co-note{color:var(--ink-2);font-size:.9375rem;margin:14px 0 0;max-width:62ch;}
+
+  .list{display:grid;gap:14px;margin-top:22px;}
+  .camp{
+    background:var(--card);border:1px solid var(--rule);border-radius:6px;
+    padding:20px clamp(16px,2.4vw,24px);
+    display:grid;grid-template-columns:auto 1fr;gap:4px 16px;
+  }
+  .camp .idx{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.8125rem;color:var(--ink-3);
+    grid-row:1 / span 3;padding-top:.35em;
+  }
+  .camp .title{
+    font-family:"Bricolage Grotesque","Be Vietnam Pro",sans-serif;
+    font-weight:700;font-size:1.1875rem;line-height:1.25;letter-spacing:-.01em;
+    text-wrap:balance;
+  }
+  .camp .tagline{
+    font-size:.9375rem;color:var(--ink-2);font-style:italic;
+  }
+  .camp .body{margin-top:8px;}
+  .camp ul{margin:0;padding-left:18px;}
+  .camp li{margin-bottom:5px;font-size:.9375rem;color:var(--ink-2);}
+  .camp li::marker{color:var(--ink-3);}
+  .camp li b{color:var(--ink);font-weight:600;}
+  .camp .cta{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.75rem;color:var(--ink-3);margin-top:10px;
+  }
+  #ssi .camp{border-left:4px solid var(--ssi);}
+  #dnse .camp{border-left:4px solid var(--dnse);}
+
+  .num{font-variant-numeric:tabular-nums;}
+
+  .partial{
+    display:inline-block;font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.6875rem;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--flag);background:var(--flag-bg);
+    padding:2px 7px;border-radius:3px;margin-left:8px;vertical-align:2px;
+    white-space:nowrap;
+  }
+
+  .note{
+    background:var(--flag-bg);border-left:4px solid var(--flag);
+    border-radius:6px;padding:18px clamp(16px,2.4vw,22px);margin:32px 0 0;
+  }
+  .note h3{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:500;
+    font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--flag);margin:0 0 8px;
+  }
+  .note ul{margin:0;padding-left:18px;}
+  .note li{font-size:.9375rem;color:var(--ink-2);margin-bottom:5px;}
+  .note li b{color:var(--ink);font-weight:600;}
+
+  footer{
+    margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);
+    font-size:.8125rem;color:var(--ink-3);
+  }
+  footer p{margin:0 0 6px;max-width:70ch;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Chiến dịch đang chạy · Chứng khoán bán lẻ Việt Nam</p>
+    <h1>Chiến dịch SSI &amp; DNSE</h1>
+    <p>Danh sách chiến dịch đang chạy trên trang chủ và menu ưu đãi của hai công ty, kèm nội dung từng chiến dịch.</p>
+    <p class="stamp">Đọc trực tiếp từ website · 25/08/2026</p>
+  </header>
+
+  <!-- ================= SSI ================= -->
+  <section id="ssi">
+    <div class="co-head">
+      <span class="name">SSI</span>
+      <span class="count">5 chiến dịch</span>
+    </div>
+    <p class="co-note">Toàn bộ nằm ở banner carousel trang chủ ssi.com.vn — không xuất hiện trong mục Tin tức.</p>
+
+    <div class="list">
+
+      <article class="camp">
+        <span class="idx">01</span>
+        <h2 class="title">Gói vay margin “Nhập cuộc”</h2>
+        <p class="tagline">Đặc quyền Khách hàng có chuyên viên tư vấn</p>
+        <div class="body">
+          <ul>
+            <li>Lãi vay <b class="num">7,99%/năm</b> trong <b class="num">90 ngày</b> đầu</li>
+            <li>Hạn mức vay <b class="num">3 tỷ đồng</b></li>
+            <li>Đối tượng: khách hàng <b>mở mới</b>, hoặc khách hiện hữu <b>không có dư nợ trong 180 ngày</b></li>
+            <li>Điều kiện: phải là khách hàng <b>có chuyên viên tư vấn</b> (không áp dụng cho tài khoản tự giao dịch)</li>
+          </ul>
+          <p class="cta">CTA: “Khám phá ngay”</p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">02</span>
+        <h2 class="title">Margin 0.0</h2>
+        <p class="tagline">Lãi vay 0 đồng, 0 áp lực</p>
+        <div class="body">
+          <ul>
+            <li>Thời gian chạy: <b class="num">14/8/2026 – 30/11/2026</b></li>
+            <li>Hạn mức <b class="num">50 triệu/ngày</b></li>
+            <li>Thời hạn vay <b class="num">30 ngày</b></li>
+            <li>Tặng <b>khóa học Margin</b> trị giá <b class="num">2 triệu đồng</b></li>
+          </ul>
+          <p class="cta">CTA: “Khám phá ngay”</p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">03</span>
+        <h2 class="title">Cú DOHA</h2>
+        <p class="tagline">Trợ lý AI 24/7</p>
+        <div class="body">
+          <ul>
+            <li>Tư vấn sản phẩm chuyên sâu</li>
+            <li>Hỗ trợ đưa ra quyết định</li>
+            <li>Phân tích cổ phiếu đa chiều</li>
+            <li>Cập nhật dữ liệu realtime</li>
+            <li>Giao diện chat (“Chat với Doha”), có linh vật hình con cú</li>
+            <li>Khuyến cáo của SSI ngay trên banner: nhận định từ Cú DOHA dựa trên công nghệ AI, <b>chỉ mang tính tham khảo</b>, không phải tư vấn đầu tư và không đảm bảo lợi nhuận</li>
+          </ul>
+          <p class="cta">CTA: “Khám phá ngay”</p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">04</span>
+        <h2 class="title">Mua Quỹ Tự Động</h2>
+        <p class="tagline">Đều đặn, thảnh thơi</p>
+        <div class="body">
+          <ul>
+            <li>Đầu tư định kỳ tự động vào chứng chỉ quỹ (banner hiển thị quỹ <b>SSI-SCA</b>)</li>
+            <li>Kích hoạt trên <b>SSI iBoard Pro</b></li>
+            <li>Hình ảnh chiến dịch gắn với các mục tiêu tài chính: du lịch, con nhỏ, nhà, xe</li>
+          </ul>
+          <p class="cta">CTA: “Kích hoạt ngay”</p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">05</span>
+        <h2 class="title">Người Đồng Hành</h2>
+        <p class="tagline">Thu nhập không giới hạn theo cách của bạn</p>
+        <div class="body">
+          <ul>
+            <li>Chương trình đối tác / giới thiệu khách hàng</li>
+            <li>Thông điệp phụ: <em>think digital, think beyond</em></li>
+            <li>Liên quan chương trình “Người Đồng Hành Liên Kết” — SSI đã thông báo <b>lùi lần đánh giá Điều kiện Duy trì đầu tiên đến 19/06/2027</b></li>
+            <li>Thể lệ chi tiết (hoa hồng, hạng đối tác) <b>không công bố công khai</b></li>
+          </ul>
+          <p class="cta">CTA: “Tham gia ngay”</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= DNSE ================= -->
+  <section id="dnse">
+    <div class="co-head">
+      <span class="name">DNSE</span>
+      <span class="count">7 chiến dịch</span>
+    </div>
+    <p class="co-note">DNSE gom chiến dịch vào một menu riêng “Quà tặng” trên thanh điều hướng, cộng thêm chiến dịch onboarding trên trang chủ.</p>
+
+    <div class="list">
+
+      <article class="camp">
+        <span class="idx">01</span>
+        <h2 class="title">Tặng 1.750 Star khi tải ứng dụng</h2>
+        <p class="tagline">Chiến dịch onboarding chính, đặt ngay trên trang chủ</p>
+        <div class="body">
+          <ul>
+            <li>Quà: <b class="num">1.750 Star</b> — theo tỷ giá DNSE công bố <b class="num">1 Star = 100đ</b>, tương đương <b class="num">≈175.000đ</b></li>
+            <li>Cơ chế <b>5 bước</b>: (1) tải app trên App Store / CH Play → (2) mở tài khoản → (3) nộp tiền lần đầu → (4) hoàn thành “đường đua Olympic” → (5) nhận quà</li>
+            <li>Có mã QR tải app ngay trên trang</li>
+            <li>Gắn với thông điệp chính của DNSE: <b>“Miễn phí giao dịch trọn đời”</b> — không phí môi giới, không phí giao dịch</li>
+          </ul>
+          <p class="cta">CTA: “Nhận ưu đãi ngay” / “Mở tài khoản”</p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">02</span>
+        <h2 class="title">“Chạy đà OLYMPIC” mở tài khoản</h2>
+        <p class="tagline">Tích lũy Star thưởng – Nhận quà hấp dẫn</p>
+        <div class="body">
+          <ul>
+            <li>Chiến dịch dành cho khách hàng <b>mở tài khoản mới</b></li>
+            <li>Cơ chế: hoàn thành các mốc nhiệm vụ (“chạy đà”) để tích Star thưởng</li>
+            <li>Là bước dẫn vào chiến dịch lớn “Olympic Chứng khoán”</li>
+          </ul>
+          <p class="cta">Vị trí: menu “Quà tặng” → mục 1<span class="partial">chi tiết thể lệ chưa lấy</span></p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">03</span>
+        <h2 class="title">Olympic Chứng khoán</h2>
+        <p class="tagline">Thế vận hội đầu tư tại DNSE</p>
+        <div class="body">
+          <ul>
+            <li>Chiến dịch gamification quy mô lớn, dựng theo mô-típ thi đấu thể thao</li>
+            <li>Có “đường đua” mà khách phải hoàn thành — được dùng làm bước 4 trong hành trình nhận 1.750 Star</li>
+          </ul>
+          <p class="cta">Vị trí: menu “Quà tặng” → mục 2<span class="partial">chi tiết thể lệ chưa lấy</span></p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">04</span>
+        <h2 class="title">Kho ưu đãi khủng</h2>
+        <p class="tagline">Tổng hợp tất cả ưu đãi của DNSE</p>
+        <div class="body">
+          <ul>
+            <li>Trang tổng hợp (landing: <em>mo-tai-khoan-nhan-qua-ngay</em>) — “Kho ưu đãi <b>siêu khủng</b> chỉ có tại DNSE”</li>
+            <li>Các thẻ ưu đãi đọc được: <b>Ấp trứng vàng</b> (sinh lời), <b>Phái sinh</b> (thị phần TOP 2)</li>
+            <li>Đóng vai trò hub — dẫn tới toàn bộ ưu đãi sản phẩm của DNSE</li>
+          </ul>
+          <p class="cta">Vị trí: menu “Quà tặng” → mục 3<span class="partial">trang treo khi scroll, còn thiếu thẻ</span></p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">05</span>
+        <h2 class="title">DNSE Pro Club</h2>
+        <p class="tagline">Tri ân khách hàng thân thiết với nhiều quà tặng giá trị</p>
+        <div class="body">
+          <ul>
+            <li>Chương trình loyalty, chạy <b class="num">01/01/2026 – 31/12/2026</b></li>
+            <li>Tích <b>Star</b> từ giao dịch thành công (chứng khoán, phái sinh, mua vàng kỳ hạn)</li>
+            <li>Quy đổi: <b class="num">1 Star = 100 VNĐ</b> — đổi lấy tiền, quà, voucher; dùng Star giảm trừ khi thanh toán QR</li>
+            <li><b>4 hạng</b>: Rookie → Pro X → Master X → Legend X</li>
+            <li>Star thưởng có hiệu lực <b class="num">12 tháng</b> kể từ tháng nhận; thăng hạng tối đa <b class="num">3 lần/năm</b>; Star không được chuyển nhượng</li>
+            <li>Có Star sinh nhật và quà sinh nhật riêng</li>
+          </ul>
+          <p class="cta">Vị trí: menu “Quà tặng” → mục 4</p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">06</span>
+        <h2 class="title">Tặng cổ phiếu</h2>
+        <p class="tagline">Sở hữu cổ phiếu doanh nghiệp TOP với giá 0 đồng</p>
+        <div class="body">
+          <ul>
+            <li>Tặng trực tiếp <b>cổ phiếu</b> (không phải tiền hay voucher) cho khách hàng</li>
+            <li>Định vị: cổ phiếu doanh nghiệp <b>TOP</b>, khách nhận với <b>giá 0 đồng</b></li>
+          </ul>
+          <p class="cta">Vị trí: menu “Quà tặng” → mục 5<span class="partial">chi tiết thể lệ chưa lấy</span></p>
+        </div>
+      </article>
+
+      <article class="camp">
+        <span class="idx">07</span>
+        <h2 class="title">Giới thiệu bạn bè</h2>
+        <p class="tagline">Nhận thưởng không giới hạn</p>
+        <div class="body">
+          <ul>
+            <li>Chương trình referral khách-giới-thiệu-khách, <b>không giới hạn</b> mức thưởng</li>
+            <li>Khác với kênh cộng tác viên <b>SACO</b> (affiliate 5 cấp, cấp 5 nhận 70% phí giao dịch) — SACO nằm ở mục Sản phẩm, không nằm trong menu Quà tặng</li>
+            <li>Hỗ trợ thêm bởi tính năng <b>Gift X</b>: tạo gói quà tiền từ số dư khả dụng, chia sẻ mã/link, hiệu lực 7 ngày</li>
+          </ul>
+          <p class="cta">Vị trí: menu “Quà tặng” → mục 6<span class="partial">mức thưởng cụ thể chưa lấy</span></p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <div class="note">
+    <h3>Đọc nhanh khác biệt</h3>
+    <ul>
+      <li><b>SSI đặt chiến dịch ở banner</b>, mỗi banner là một sản phẩm hoặc ưu đãi độc lập — người dùng phải lướt carousel mới thấy hết. Không có trang tổng hợp ưu đãi.</li>
+      <li><b>DNSE có menu “Quà tặng” riêng trên thanh điều hướng</b> cộng một trang hub “Kho ưu đãi khủng” — chiến dịch là một mục thường trực, không phải nội dung tạm.</li>
+      <li><b>SSI ưu đãi bằng giá vốn</b> (lãi margin 7,99%, lãi 0 đồng, tặng khóa học). <b>DNSE ưu đãi bằng quà quy đổi được</b> (Star, cổ phiếu 0 đồng, thưởng referral).</li>
+      <li>Cả hai <b>đều đang chạy chiến dịch margin ưu đãi</b> — nhưng SSI chỉ công bố ở banner, còn trang biểu phí vẫn ghi một mức 13,5%/năm.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p><b>Nguồn:</b> banner carousel trang chủ ssi.com.vn (5 slide) · menu “Quà tặng” và trang chủ dnse.com.vn · trang hub dnse.com.vn/mo-tai-khoan-nhan-qua-ngay · tài liệu hướng dẫn hdsd.dnse.com.vn (chi tiết Pro Club, Gift X, SACO).</p>
+    <p>Nội dung là thông tin công bố của đối thủ tại thời điểm đọc, phục vụ phân tích cạnh tranh nội bộ. Các mục gắn nhãn vàng là phần chưa lấy được thể lệ chi tiết.</p>
+  </footer>
+
+</div>
+</body>
+</html>
